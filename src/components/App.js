@@ -37,7 +37,11 @@ const App = () => {
 
   return (
     <div>
+
+      <td></td>
+
       <h1 id="heading">Calendar</h1>
+
       <select
         id="month"
         value={month}
@@ -74,17 +78,11 @@ const App = () => {
       <table>
         <thead>
           <tr>
-            {days.map(d => (
-              <th key={d}>{d}</th>
-            ))}
+            {days.map(d => <th key={d}>{d}</th>)}
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td></td>
-          </tr>
-
           {[0, 1, 2, 3, 4, 5].map(row => (
             <tr key={row}>
               {cells.slice(row * 7, row * 7 + 7).map((cell, i) => (
