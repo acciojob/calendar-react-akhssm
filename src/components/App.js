@@ -8,17 +8,19 @@ const months = [
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const App = () => {
-  const [month, setMonth] = useState("December"); 
-  const [year, setYear] = useState(2023);
+  const [year, setYear] = useState(2025);
+  const [month, setMonth] = useState("December");
   const [editYear, setEditYear] = useState(false);
 
   const monthIndex = months.indexOf(month);
   const firstDay = new Date(year, monthIndex, 1).getDay();
   const totalDays = new Date(year, monthIndex + 1, 0).getDate();
 
-  const cells = [];
-  for (let i = 0; i < firstDay; i++) cells.push("");
-  for (let i = 1; i <= totalDays; i++) cells.push(i);
+  const cells = Array(42).fill("");
+
+  for (let i = 0; i < totalDays; i++) {
+    cells[firstDay + i] = i + 1;
+  }
 
   const changeMonth = (step) => {
     let idx = monthIndex + step;
@@ -35,6 +37,7 @@ const App = () => {
 
   return (
     <div>
+
       <h1 id="heading">Calendar</h1>
 
       <select
@@ -47,22 +50,27 @@ const App = () => {
         ))}
       </select>
 
-      {editYear ? (
-        <input
-          id="year-text-box"
-          type="number"
-          value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-          onBlur={() => setEditYear(false)}
-          autoFocus
-        />
-      ) : (
+      {!editYear && (
         <span
           id="year"
           onDoubleClick={() => setEditYear(true)}
         >
           {year}
         </span>
+      )}
+
+      {editYear && (
+        <input
+          id="year-text-box"
+          type="number"
+          value={year}
+          autoFocus
+          onChange={(e) => setYear(Number(e.target.value))}
+          onBlur={() => setEditYear(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setEditYear(false);
+          }}
+        />
       )}
 
       <table>
@@ -72,10 +80,10 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {[0,1,2,3,4,5].map(row => (
+          {[0, 1, 2, 3, 4, 5].map(row => (
             <tr key={row}>
-              {cells.slice(row * 7, row * 7 + 7).map((c, i) => (
-                <td key={i}>{c}</td>
+              {cells.slice(row * 7, row * 7 + 7).map((cell, i) => (
+                <td key={i}>{cell}</td>
               ))}
             </tr>
           ))}
